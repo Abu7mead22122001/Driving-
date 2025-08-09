@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'تعليم القيادة (Demo)',
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0D47A1))),
+      debugShowCheckedModeBanner: false,
+      home: const WelcomeScreen(),
+    );
+  }
+}
+
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('أهلا بيك')),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('نسخة معاينة للشكل العام', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LearnerHome())),
+              child: const Text('أدخل كطالب'),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TrainerHome())),
+              child: const Text('أدخل ككابتن'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LearnerHome extends StatelessWidget {
+  const LearnerHome({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('الطالب')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          TextField(decoration: InputDecoration(hintText: 'ابحث عن كابتن...', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)))),
+          const SizedBox(height: 12),
+          Card(child: ListTile(title: const Text('كابتن محمد'), subtitle: const Text('4.8 ⭐  |  عربية مانيوال'), trailing: const Icon(Icons.chevron_right))),
+          Card(child: ListTile(title: const Text('كابتن أحمد'), subtitle: const Text('4.6 ⭐  |  أوتوماتيك'), trailing: const Icon(Icons.chevron_right))),
+          const SizedBox(height: 20),
+          ElevatedButton(onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CreateOrder())), child: const Text('إنشاء طلب')),
+        ],
+      ),
+    );
+  }
+}
+
+class CreateOrder extends StatefulWidget {
+  const CreateOrder({super.key});
+  @override
+  State<CreateOrder> createState() => _CreateOrderState();
+}
+class _CreateOrderState extends State<CreateOrder> {
+  String? vehicleType; String? transmission;
+  final vehicles = ['عربية','موتوسيكل','سكوتر'];
+  final trans = ['مانيوال','أوتوماتيك'];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('طلب جديد')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('نوع المركبة'), const SizedBox(height: 6),
+            Wrap(spacing: 8, children: vehicles.map((v)=>ChoiceChip(label: Text(v), selected: vehicleType==v, onSelected: (s){ setState(()=>vehicleType = s? v : null); })).toList()),
+            const SizedBox(height: 16),
+            const Text('نوع الفتيس'), const SizedBox(height: 6),
+            Wrap(spacing: 8, children: trans.map((t)=>ChoiceChip(label: Text(t), selected: transmission==t, onSelected: (s){ setState(()=>transmission = s? t : null); })).toList()),
+            const Spacer(),
+            SizedBox(width: double.infinity, child: ElevatedButton(onPressed: (){
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم إرسال طلبك (تجريبي)')));
+              Navigator.pop(context);
+            }, child: const Text('إرسال الطلب'))),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TrainerHome extends StatelessWidget {
+  const TrainerHome({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(appBar: AppBar(title: const Text('الكابتن')), body: const Center(child: Text('هنا تظهر طلبات الطلاب (تجريبي).')));
+  }
+}
