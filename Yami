@@ -1,0 +1,13 @@
+name: driving_learn_demo
+description: Demo APK build (no Firebase/Maps)
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
